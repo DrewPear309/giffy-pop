@@ -27,7 +27,7 @@ A simple, customizable fullscreen slideshow application that automatically displ
 
 ## Configuration
 
-You can customize the number of GIFs to display by modifying line 102 in the `script.js` file:
+You can customize the number of GIFs to display by modifying line 102.
 
 ```javascript
 const numberOfGifs = 10; // Change this number to set the desired number of GIFs
