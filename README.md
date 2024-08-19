@@ -22,8 +22,9 @@ A simple, customizable fullscreen slideshow application that automatically displ
 ## Usage
 
 1. Place your GIF files in the `gifs` folder within the project directory.
-2. Open `index.html` in your web browser.
-3. The slideshow will start automatically, displaying your GIFs in fullscreen mode.
+2. GIF files must be numbered 0001.gif, 0002.gif, etc. Use included bat file for renaming numerically.
+3. Open `index.html` in your web browser.
+4. The slideshow will start automatically, displaying your GIFs in fullscreen mode.
 
 ## Configuration
 
