@@ -1,4 +1,4 @@
-# Fullscreen GIF Slideshow
+# Fullscreen Animated GIF Slideshow
 
 A simple, customizable fullscreen slideshow application that automatically displays an unlimited number of GIFs from a single folder.
 
