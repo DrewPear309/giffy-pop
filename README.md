@@ -1,6 +1,6 @@
 # Fullscreen Animated GIF Slideshow
 
-A simple, customizable fullscreen slideshow application that automatically displays an unlimited number of GIFs from a single folder.
+A simple, customizable fullscreen slideshow application built on Windows that automatically displays an unlimited number of GIFs from a single folder.
 
 ## Features
 
