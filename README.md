@@ -27,6 +27,8 @@ A simple, customizable fullscreen slideshow application that automatically displ
 
 ## Configuration
 
+Burger icon in upper right corner opens menu to adjust speed, pause slideshow, and move back 1 gif.
+
 You can customize the number of GIFs to display by modifying line 102.
 
 ```javascript
