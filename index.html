@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Slideshow</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #slideshow-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #slideshow-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #menu-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            z-index: 1000;
+        }
+
+        #menu-icon img {
+            width: 100%;
+            height: 100%;
+        }
+
+        #slide-up-menu {
+            position: absolute;
+            bottom: -100px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            transition: bottom 0.5s;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            flex-wrap: wrap;
+        }
+
+        #slide-up-menu.active {
+            bottom: 0;
+        }
+
+        #slide-up-menu button, 
+        #slide-up-menu .slider-container {
+            margin: 5px 10px;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #speed-label, #hue-label {
+            color: white;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input[type="range"] {
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="slideshow-container">
+        <img id="slideshow-gif" src="" alt="Slideshow GIF">
+    </div>
+    <div id="menu-icon">
+        <img src="burger.svg" alt="Menu">
+    </div>
+    <div id="slide-up-menu">
+        <button id="pause-start">Pause</button>
+        <button id="back-one">Back</button>
+        <div class="slider-container">
+            <label id="speed-label" for="speed-slider">Speed: <span id="speed-value">0.5</span>s</label>
+            <input type="range" id="speed-slider" min="0.5" max="5" step="0.1" value="0.5">
+        </div>
+    </div>
+
+    <script>
+        const TOTAL_FRAMES = 10;
+        const PRELOAD_COUNT = 5; // Number of frames to preload
+let currentGifIndex = 1;
+let isPaused = false;
+let speed = 500;
+let lastTimestamp = 0;
+let frames = [];
+let preloadedFrames = new Map();
+
+function loadFrames() {
+    for (let i = 1; i <= PRELOAD_COUNT; i++) {
+        preloadFrame((currentGifIndex + i - 1) % TOTAL_FRAMES + 1);
+    }
+}
+
+function preloadFrame(index) {
+    const img = new Image();
+    img.src = `gifs/${String(index).padStart(4, '0')}.gif`;
+    preloadedFrames.set(index, img);
+}
+
+function displayGif(index) {
+    const gifElement = document.getElementById('slideshow-gif');
+    
+    // Unload the previous GIF
+    gifElement.src = '';
+
+    // Load and display the new GIF
+    gifElement.src = `gifs/${String(index).padStart(4, '0')}.gif`;
+
+    // Preload the next set of frames
+    preloadFrames(index);
+}
+
+function preloadFrames(index) {
+    const startIndex = (index % TOTAL_FRAMES) + 1;
+    for (let i = 0; i < PRELOAD_COUNT; i++) {
+        const preloadIndex = (startIndex + i - 1) % TOTAL_FRAMES + 1;
+        preloadFrame(preloadIndex);
+    }
+}
+
+function startSlideshow(timestamp) {
+    if (!lastTimestamp) {
+        lastTimestamp = timestamp;
+    }
+
+    const elapsed = timestamp - lastTimestamp;
+
+    if (elapsed > speed) {
+        if (!isPaused) {
+            currentGifIndex = (currentGifIndex % TOTAL_FRAMES) + 1;
+            displayGif(currentGifIndex);
+        }
+        lastTimestamp = timestamp;
+    }
+
+    requestAnimationFrame(startSlideshow);
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    document.getElementById('pause-start').textContent = isPaused ? 'Start' : 'Pause';
+}
+
+function changeSpeed() {
+    speed = document.getElementById('speed-slider').value * 1000;
+    document.getElementById('speed-value').textContent = document.getElementById('speed-slider').value;
+}
+
+function backOneGif() {
+    currentGifIndex = (currentGifIndex - 2 + TOTAL_FRAMES) % TOTAL_FRAMES + 1;
+    displayGif(currentGifIndex);
+}
+
+document.getElementById('pause-start').addEventListener('click', togglePause);
+document.getElementById('speed-slider').addEventListener('input', changeSpeed);
+document.getElementById('back-one').addEventListener('click', backOneGif);
+document.getElementById('menu-icon').addEventListener('click', () => {
+    document.getElementById('slide-up-menu').classList.toggle('active');
+});
+
+loadFrames();
+displayGif(currentGifIndex);
+requestAnimationFrame(startSlideshow);
+
+    </script>
+
+</body>
+</html>
